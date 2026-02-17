@@ -14,7 +14,7 @@ cd arriba_v2.5.1 && make # or use precompiled binaries
 Arriba requires an assembly in FastA format, gene annotation in GTF format, and a STAR index built from the two. You can use your preferred assembly and annotation, as long as their coordinates are compatible with hg19/hs37d5/GRCh37 or hg38/GRCh38 or mm10/GRCm38 or mm39/GRCm39. If you use another assembly, then the coordinates in the blacklist will not match and the predictions will contain many false positives. GENCODE annotation is recommended over RefSeq due to more comprehensive annotation of immunoglobulin/T-cell receptor loci and splice sites, which improves sensitivity. If you do not already have the files and a STAR index, you can use the script `download_references.sh`. It downloads the files to the current working directory and builds a STAR index. Run the script without arguments to see a list of available files. Choose a file with the keyword `viral` if Arriba is supposed to detect viral integration sites. Note that this step requires ~45 GB of RAM and 8 cores (can be adjusted by setting the environment variable `THREADS`).
 
 ```bash
-./download_references.sh hs37d5viral+GENCODE19
+./download_references.sh hs37d5+GENCODE19
 ```
 
 The download file contains a script `run_arriba.sh`, which demonstrates the usage of Arriba (see also section [Workflow](03-Workflow#demo-script)). We recommend that you use this as a guide to integrate Arriba into your existing STAR-based RNA-Seq pipeline. When Arriba is integrated properly, fusion detection only adds a few minutes to the regular alignment workflow, since Arriba utilizes the alignments produced by STAR during a standard RNA-Seq workflow and does not require alignment solely for the sake of fusion detection.
@@ -33,7 +33,7 @@ Install [Docker](https://www.docker.com/) according to the developers' instructi
 Run the script `download_references.sh` inside the Docker container. It downloads the assembly and gene annotation to the directory `/path/to/references` and builds a STAR index. Run the script without arguments to see a list of available files. Choose a file with the keyword `viral` if Arriba is supposed to detect viral integration sites. Note that this step requires ~45 GB of RAM and 8 cores (can be adjusted by passing the parameter `--env=THREADS=...`).
 
 ```bash
-docker run --rm -v /path/to/references:/references uhrigs/arriba:2.5.1 download_references.sh hs37d5viral+GENCODE19
+docker run --rm -v /path/to/references:/references uhrigs/arriba:2.5.1 download_references.sh hs37d5+GENCODE19
 ```
 
 Use the following Docker command to run Arriba from the container. Replace `/path/to/` with the path to the respective input file. Leave the paths after the colons unmodified - these are the paths inside the Docker container. In case of single-end data, the second FastQ file is omitted. Running Arriba requires ~45 GB of RAM and 8 cores (can be adjusted by passing the parameter `--env=THREADS=...`).
